@@ -1,0 +1,212 @@
+
+/* ================= MAIN WRAPPER ================= */
+
+.quizletters-page {
+  min-height: 100vh;
+  padding: 30px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(
+    to bottom,
+    #8be3e3 0%,
+    #bca8f6 50%,
+    #f042ff 100%
+  );
+  display: flex;
+  gap: 30px;
+}
+
+/* ================= TOP ICONS ================= */
+
+.quizletters-page .icon {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  top: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.quizletters-page .speaker {
+  left: 20px;
+}
+
+.quizletters-page .home {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.quizletters-page .close {
+  right: 20px;
+}
+
+/* ================= LEFT PANEL ================= */
+
+.quizletters-page .left-box {
+  width: 28%;
+  background: #f3f3f3;
+  border-radius: 0 28px 28px 0;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quizletters-page .left-box h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.quizletters-page .target-img {
+  width: 80%;
+  background: white;
+  padding: 16px;
+  border-radius: 25px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= RIGHT PANEL ================= */
+
+.quizletters-page .right-box {
+  width: 72%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================= GRID ================= */
+
+.quizletters-page .grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  justify-content: center;
+}
+
+/* ================= CARD ================= */
+
+.quizletters-page .card-wrapper {
+  position: relative;
+}
+
+.quizletters-page .card {
+  width: 170px;
+  height: 170px;
+  border-radius: 25px;
+  background: #f2f2f2;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quizletters-page .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ================= CORRECT ================= */
+
+.quizletters-page .card-wrapper.correct .card {
+  box-shadow: 0 0 20px 6px #00ff00;
+}
+
+/* ================= WRONG ================= */
+
+.quizletters-page .card-wrapper.wrong .card {
+  box-shadow: 0 0 18px 5px #ff3b3b;
+  animation: shake 0.4s;
+}
+
+/* ================= TICK ================= */
+
+.quizletters-page .tick {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  color: green;
+  font-weight: bold;
+}
+
+/* ================= POPUP ================= */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-box {
+  background: white;
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.popup-box h2 {
+  margin-bottom: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.popup-box button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 15px;
+  background: #6c63ff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.popup-box button:hover {
+  transform: scale(1.08);
+}
+
+/* ================= SHAKE ANIMATION ================= */
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .quizletters-page {
+    flex-direction: column;
+  }
+
+  .quizletters-page .left-box,
+  .quizletters-page .right-box {
+    width: 100%;
+    border-radius: 25px;
+  }
+
+  .quizletters-page .grid {
+    grid-template-columns: repeat(2, 150px);
+  }
+}
+
+@media (max-width: 500px) {
+  .quizletters-page .grid {
+    grid-template-columns: repeat(1, 150px);
+  }
+}

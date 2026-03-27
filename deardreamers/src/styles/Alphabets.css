@@ -1,0 +1,76 @@
+/* RESET */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* ================= ALPHABETS PAGE ================= */
+.alphabets-page {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(to bottom, #C586EF, #E893C5);
+  padding-top: 100px; /* space for fixed top icons */
+}
+
+/* ================= TOP ICONS ================= */
+.alphabets-page .icon {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  top: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.alphabets-page .speaker {
+  left: 20px;
+}
+
+.alphabets-page .home {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.alphabets-page .close {
+  right: 20px;
+}
+
+/* ================= GRID CONTAINER ================= */
+.alphabets-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  padding: 20px;
+  justify-items: center;
+}
+
+/* ================= CARD ================= */
+.alphabets-page .card {
+  width: 150px;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.alphabets-page .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ================= CENTER LAST LETTER (Z) ================= */
+/* Since grid has 5 columns, center item in column 3 */
+.alphabets-page .container .card:last-child {
+  grid-column: 3 / 4;
+}

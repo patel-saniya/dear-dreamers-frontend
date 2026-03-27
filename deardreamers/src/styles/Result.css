@@ -1,0 +1,116 @@
+/* ---------------- RESET (SCOPED) ---------------- */
+.result-page {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* ---------------- PAGE BACKGROUND ---------------- */
+.result-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    #C3C7F3 0%,
+    #C8A8E9 25%,
+    #E3AADD 50%,
+    #F5BCBA 75%,
+    #F3DCDC 100%
+  );
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+/* ================= TOP ICONS ================= */
+
+.result-page .icon {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  top: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.result-page .speaker {
+  left: 20px;
+}
+
+.result-page .home {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.result-page .close {
+  right: 20px;
+}
+
+
+/* ---------------- MAIN WRAPPER ---------------- */
+.result-page .score-wrapper {
+  width: 95%;
+  margin-top: 40px;
+  max-width: 1100px;
+}
+
+/* ---------------- TITLE BAR ---------------- */
+.result-page .score-title {
+  background: white;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 40px;
+}
+
+/* ---------------- TABLE CONTAINER ---------------- */
+.result-page .table-box {
+  background: white;
+  border-radius: 24px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------------- TABLE ---------------- */
+.result-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* ---------------- HEADER ---------------- */
+.result-page thead th {
+  font-size: 18px;
+  padding: 18px 12px;
+  border: 1px solid #000000;
+  background: #ffffff;
+}
+
+/* ---------------- BODY ---------------- */
+.result-page tbody td {
+  font-size: 18px;
+  padding: 18px 12px;
+  text-align: center;
+  border: 1px solid #000000;
+}
+
+/* ---------------- STRIPES ---------------- */
+.result-page tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 768px) {
+  .result-page thead th,
+  .result-page tbody td {
+    font-size: 14px;
+    padding: 12px 8px;
+  }
+
+  .result-page .score-title {
+    font-size: 20px;
+  }
+}

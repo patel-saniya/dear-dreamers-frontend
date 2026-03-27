@@ -1,0 +1,188 @@
+/* ===== MAIN PAGE WRAPPER ===== */
+.signup-login {
+  padding: 40px 0;
+  height: 100vh;
+  margin: 0;
+  overflow: auto;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(
+    to bottom,
+    #001d39,
+    #0a4174,
+    #49769f,
+    #4e8ea2,
+    #5190a3,
+    #6ea2b3,
+    #7bbde8,
+    #bdd8e9
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== CONTAINER ===== */
+.signup-login .container {
+  width: 450px;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+  backdrop-filter: blur(10px);
+  text-align: center;
+  position: relative;
+}
+
+/* ===== TABS ===== */
+.signup-login .tabs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signup-login .tabs label {
+  flex: 1;
+  padding: 8px;
+  background: #ddd;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  font-size: 16px;
+}
+
+.signup-login .tabs .active {
+  background: #3f6e9b;
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+/* ===== FORMS ===== */
+.signup-login form {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.signup-login form h3 {
+  color: #ffffff;
+  font-size: 28px;
+  text-align: center;
+}
+
+/* ===== INPUTS ===== */
+.signup-login form input {
+  width: 90%;
+  padding: 10px;
+  margin: 15px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+/* ===== BUTTON ===== */
+.signup-login form button {
+  display: block;
+  margin: 15px auto;
+  width: 60%;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.signup-login form button:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 1);
+  text-decoration: underline;
+}
+
+/* ===== TEXT LINKS ===== */
+.signup-login .already,
+.signup-login .create-account {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.signup-login .already label,
+.signup-login .create-account label {
+  color: #034481;
+  cursor: pointer;
+}
+
+.signup-login .already label:hover,
+.signup-login .create-account label:hover {
+  text-decoration: underline;
+}
+
+/* ===== ASTRONAUT IMAGE ===== */
+.signup-login .image-astro {
+  position: absolute;
+  top: 50%;
+  left: 450px;
+  transform: translateY(-50%);
+}
+
+.signup-login .image-astro img {
+  width: 400px;
+}
+
+/* ===== MODAL OVERLAY ===== */
+.signup-login .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== MODAL BOX ===== */
+.signup-login .modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 90%;
+  max-width: 350px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.signup-login .modal-box h2 {
+  color: #0a4174;
+  margin-bottom: 10px;
+}
+
+.signup-login .modal-box p {
+  color: #333;
+  font-size: 16px;
+}
+
+/* ===== Ok BUTTON ===== */
+.signup-login .ok-btn {
+  margin-top: 15px;
+  background: #0a4174;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.signup-login .ok-btn:hover {
+  background: #49769f;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .signup-login .image-astro {
+    display: none;
+  }
+
+  .signup-login .container {
+    width: 90%;
+  }
+}

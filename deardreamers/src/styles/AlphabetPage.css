@@ -1,0 +1,110 @@
+/* ================= RESET ================= */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* ================= PAGE ================= */
+.alphabetA-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #9db2ec, #b6befc, #b7a4f0, #ca9fe9, #dcbdf0);
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ================= TOP ICONS ================= */
+.alphabetA-page .top-icons {
+  position: fixed;
+  top: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.alphabetA-page .icon {
+  width: 50px;
+  cursor: pointer;
+}
+
+/* ================= CARDS ================= */
+.alphabetA-page .container {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-top: 60px;
+}
+
+.alphabetA-page .card {
+  width: 240px;
+  height: 240px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+.alphabetA-page .card img {
+  width: 85%;
+}
+
+.alphabetA-page .card:hover {
+  transform: scale(1.05);
+}
+
+.alphabetA-page .card:active {
+  transform: scale(0.95);
+}
+
+/* ================= BUTTON ================= */
+.alphabetA-page .main-btn {
+  margin: 40px auto;
+  font-size: 28px;
+  padding: 14px 40px;
+  width: 350px;
+  border: none;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.alphabetA-page .main-btn:hover {
+  transform: scale(1.05);
+}
+
+.alphabetA-page .main-btn:active {
+  transform: scale(0.95);
+}
+
+/* ================= NEXT ICON ================= */
+.alphabetA-page .next-icon {
+  width: 50px;
+  position: fixed;
+  bottom: 30px;
+  right: 25px;
+  cursor: pointer;
+}
+
+.alphabetA-page .prev-icon {
+  width: 50px;
+  position: fixed;
+  bottom: 30px;
+  left: 25px;
+  cursor: pointer;
+}
