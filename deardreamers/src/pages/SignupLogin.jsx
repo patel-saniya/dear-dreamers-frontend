@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "./../styles/SignupLogin.css";
 import astroImage from "../assets/images/babyastro.png";
 
+// ✅ ADD THIS LINE
+const API_URL = process.env.REACT_APP_API_URL;
+
 function SignupLogin() {
   const navigate = useNavigate();
 
@@ -46,7 +49,7 @@ function SignupLogin() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/DearDreamersApp/SignupServlet",
+        `${API_URL}/DearDreamersApp/SignupServlet`, // ✅ FIXED
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -80,11 +83,11 @@ function SignupLogin() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/DearDreamersApp/LoginServlet",
+        `${API_URL}/DearDreamersApp/LoginServlet`, // ✅ FIXED
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          credentials: "include",
+          credentials: "include", // IMPORTANT for session
           body: params.toString(),
         }
       );
@@ -92,7 +95,7 @@ function SignupLogin() {
       const text = await response.text();
 
       if (text.toLowerCase().includes("successful")) {
-        navigate("/home"); // ✅ REDIRECT TO HOME
+        navigate("/home");
       } else {
         setError(text);
       }
@@ -113,7 +116,7 @@ function SignupLogin() {
       password: "",
       confirmPassword: "",
     });
-    setIsSignup(false); // switch to login after signup
+    setIsSignup(false);
   };
 
   return (
@@ -169,7 +172,6 @@ function SignupLogin() {
         </div>
       </div>
 
-      {/* ✅ SUCCESS MODAL */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-box">
