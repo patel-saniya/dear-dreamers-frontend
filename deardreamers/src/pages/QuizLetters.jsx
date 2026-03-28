@@ -65,6 +65,8 @@ import soundZ from "../assets/audio/alphabets/Z.mpeg";
 
 import wrongSoundFile from "../assets/audio/We-need-to-try-again.mpeg";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 /* ================= MAPS ================= */
 const alphabetImages = {
   A, B, C, D, E, F, G, H, I, J,
@@ -85,7 +87,6 @@ const alphabetSounds = {
 const letters = Object.keys(alphabetImages);
 
 function QuizLetter() {
-
   const { letter } = useParams();
   const navigate = useNavigate();
 
@@ -103,15 +104,15 @@ function QuizLetter() {
     }
   }, [letter]);
 
-  const generateCards = useCallback (() => {
+  const generateCards = useCallback(() => {
     let newCards = new Array(12).fill(null);
     const correctPositions = [0, 3, 6, 9];
 
-    correctPositions.forEach(i => {
+    correctPositions.forEach((i) => {
       newCards[i] = currentLetter;
     });
 
-    const otherLetters = letters.filter(l => l !== currentLetter);
+    const otherLetters = letters.filter((l) => l !== currentLetter);
 
     for (let i = 0; i < 12; i++) {
       if (!newCards[i]) {
@@ -128,17 +129,15 @@ function QuizLetter() {
     setShowPopup(false);
   }, [currentLetter]);
 
-  useEffect (() => {
+  useEffect(() => {
     generateCards();
   }, [generateCards]);
 
-  /* SAVE SCORE */
   const saveScore = async (finalWrong) => {
-
-    const score = (4 * 10) - (finalWrong * 2);
+    const score = 4 * 10 - finalWrong * 2;
 
     try {
-      await fetch("http://localhost:8080/DearDreamersApp/SaveScoreServlet", {
+      await fetch(`${API_URL}/SaveScoreServlet`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -149,7 +148,7 @@ function QuizLetter() {
           correct_count: 4,
           wrong_count: finalWrong,
           score: score
-        })
+        }).toString()
       });
 
       console.log("Score saved successfully");
@@ -159,11 +158,9 @@ function QuizLetter() {
   };
 
   const handleClick = (value, index) => {
-
     if (correctIndexes.includes(index)) return;
 
     if (value === currentLetter) {
-
       const audio = new Audio(alphabetSounds[currentLetter]);
       audio.play();
 
@@ -172,33 +169,26 @@ function QuizLetter() {
       setWrongIndex(null);
 
       if (updated.length === 4) {
-
-        const finalWrong = wrongCount;   
+        const finalWrong = wrongCount;
 
         let msg = "";
 
-        if (finalWrong === 0)
-          msg = "🌟 Excellent! Perfect Job!";
-        else if (finalWrong <= 3)
-          msg = "😊 Good Job! Keep Going!";
-        else if (finalWrong <= 6)
-          msg = "👍 Nice Try! You’re Learning!";
-        else
-          msg = "💪 Try Again! You’ll Do Better!";
+        if (finalWrong === 0) msg = "🌟 Excellent! Perfect Job!";
+        else if (finalWrong <= 3) msg = "😊 Good Job! Keep Going!";
+        else if (finalWrong <= 6) msg = "👍 Nice Try! You’re Learning!";
+        else msg = "💪 Try Again! You’ll Do Better!";
 
         setFinalMessage(msg);
         setShowPopup(true);
 
-        saveScore(finalWrong);   
+        saveScore(finalWrong);
       }
-
     } else {
-
       const wrongAudio = new Audio(wrongSoundFile);
       wrongAudio.play();
 
       setWrongIndex(index);
-      setWrongCount(prev => prev + 1);
+      setWrongCount((prev) => prev + 1);
 
       setTimeout(() => setWrongIndex(null), 500);
     }
@@ -220,20 +210,20 @@ function QuizLetter() {
   return (
     <>
       <div className="quizletters-page">
-
         <div>
-          <img src={speaker} 
-            alt="speaker" 
-            className="icon speaker" 
+          <img
+            src={speaker}
+            alt="speaker"
+            className="icon speaker"
           />
-          
+
           <img
             src={home}
             alt="home"
             className="icon home"
             onClick={() => navigate("/home")}
           />
-          
+
           <img
             src={close}
             alt="close"

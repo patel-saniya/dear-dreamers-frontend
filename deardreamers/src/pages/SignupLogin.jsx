@@ -48,14 +48,11 @@ function SignupLogin() {
     params.append("password", formData.password);
 
     try {
-      const response = await fetch(
-        `${API_URL}/DearDreamersApp/SignupServlet`, // ✅ FIXED
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: params.toString(),
-        }
-      );
+     const response = await fetch(`${API_URL}/SignupServlet`, {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: params.toString(),
+});
 
       const text = await response.text();
 
@@ -82,15 +79,12 @@ function SignupLogin() {
     params.append("password", formData.password);
 
     try {
-      const response = await fetch(
-        `${API_URL}/DearDreamersApp/LoginServlet`, // ✅ FIXED
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          credentials: "include", // IMPORTANT for session
-          body: params.toString(),
-        }
-      );
+     const response = await fetch(`${API_URL}/LoginServlet`, {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  credentials: "include",
+  body: params.toString(),
+});
 
       const text = await response.text();
 

@@ -15,7 +15,7 @@ function Result() {
 
   // Fetch result from backend
   useEffect(() => {
-    fetch(`${API_URL}/DearDreamersApp/ResultServlet`, {
+    fetch(`${API_URL}/ResultServlet`, {
       method: "POST",
       credentials: "include"
     })
@@ -38,7 +38,7 @@ function Result() {
   // Logout + Redirect
   const handleClose = async () => {
     try {
-      await fetch(`${API_URL}/DearDreamersApp/LogoutServlet`, {
+      await fetch(`${API_URL}/LogoutServlet`, {
         method: "POST",
         credentials: "include"
       });
