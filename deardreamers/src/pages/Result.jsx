@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./../styles/Result.css";
 
-// Top icons
 import speaker from "../assets/images/speaker-icon/alphabets-speaker.png";
 import home from "../assets/images/home-icon/alphabets-home.png";
 import close from "../assets/images/close-icon/alphabets-close.png";
@@ -11,31 +10,45 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function Result() {
   const [scores, setScores] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Fetch result from backend
   useEffect(() => {
-    fetch(`${API_URL}/ResultServlet`, {
-      method: "POST",
-      credentials: "include"
-    })
-      .then((res) => res.json())
-      .then((data) => setScores(data))
-      .catch((err) => console.log(err));
+    const fetchResults = async () => {
+      try {
+        const response = await fetch(`${API_URL}/ResultServlet`, {
+          method: "POST",
+          credentials: "include"
+        });
+
+        const data = await response.json();
+        console.log("Result data:", data);
+
+        if (Array.isArray(data)) {
+          setScores(data);
+        } else {
+          setScores([]);
+        }
+      } catch (err) {
+        console.log("Error fetching result:", err);
+        setScores([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
   }, []);
 
-  // Speaker Sound
   const handleSpeaker = () => {
     const audio = new Audio("/sounds/result.mpeg");
-    audio.play();
+    audio.play().catch((err) => console.log("Audio play error:", err));
   };
 
-  // Go to Home
   const handleHome = () => {
     navigate("/home");
   };
 
-  // Logout + Redirect
   const handleClose = async () => {
     try {
       await fetch(`${API_URL}/LogoutServlet`, {
@@ -43,7 +56,7 @@ function Result() {
         credentials: "include"
       });
     } catch (error) {
-      console.log(error);
+      console.log("Logout error:", error);
     }
 
     navigate("/");
@@ -51,7 +64,6 @@ function Result() {
 
   return (
     <div className="result-page">
-      {/* Top Icons */}
       <div className="top-icons">
         <img
           src={speaker}
@@ -90,7 +102,11 @@ function Result() {
             </thead>
 
             <tbody>
-              {scores.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="4">Loading...</td>
+                </tr>
+              ) : scores.length > 0 ? (
                 scores.map((item, index) => (
                   <tr key={index}>
                     <td>{item.alphabet}</td>
