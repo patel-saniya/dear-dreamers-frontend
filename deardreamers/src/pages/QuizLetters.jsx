@@ -97,6 +97,7 @@ function QuizLetter() {
   const [wrongCount, setWrongCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [finalMessage, setFinalMessage] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (letter) {
@@ -105,7 +106,7 @@ function QuizLetter() {
   }, [letter]);
 
   const generateCards = useCallback(() => {
-    let newCards = new Array(12).fill(null);
+    const newCards = new Array(12).fill(null);
     const correctPositions = [0, 3, 6, 9];
 
     correctPositions.forEach((i) => {
@@ -116,9 +117,9 @@ function QuizLetter() {
 
     for (let i = 0; i < 12; i++) {
       if (!newCards[i]) {
-        const random =
+        const randomLetter =
           otherLetters[Math.floor(Math.random() * otherLetters.length)];
-        newCards[i] = random;
+        newCards[i] = randomLetter;
       }
     }
 
@@ -127,6 +128,8 @@ function QuizLetter() {
     setWrongIndex(null);
     setWrongCount(0);
     setShowPopup(false);
+    setFinalMessage("");
+    setIsSaving(false);
   }, [currentLetter]);
 
   useEffect(() => {
@@ -137,7 +140,7 @@ function QuizLetter() {
     const score = 4 * 10 - finalWrong * 2;
 
     try {
-      await fetch(`${API_URL}/SaveScoreServlet`, {
+      const response = await fetch(`${API_URL}/SaveScoreServlet`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -145,24 +148,35 @@ function QuizLetter() {
         credentials: "include",
         body: new URLSearchParams({
           alphabet: currentLetter,
-          correct_count: 4,
-          wrong_count: finalWrong,
-          score: score
+          correct_count: "4",
+          wrong_count: String(finalWrong),
+          score: String(score)
         }).toString()
       });
 
-      console.log("Score saved successfully");
+      const data = await response.json();
+      console.log("Save score response:", data);
+
+      if (
+        data.message === "Score inserted successfully" ||
+        data.message === "Score updated successfully"
+      ) {
+        return true;
+      }
+
+      return false;
     } catch (error) {
       console.error("Error saving score:", error);
+      return false;
     }
   };
 
-  const handleClick = (value, index) => {
-    if (correctIndexes.includes(index)) return;
+  const handleClick = async (value, index) => {
+    if (correctIndexes.includes(index) || isSaving) return;
 
     if (value === currentLetter) {
       const audio = new Audio(alphabetSounds[currentLetter]);
-      audio.play();
+      audio.play().catch((err) => console.log("Audio play error:", err));
 
       const updated = [...correctIndexes, index];
       setCorrectIndexes(updated);
@@ -172,25 +186,32 @@ function QuizLetter() {
         const finalWrong = wrongCount;
 
         let msg = "";
-
         if (finalWrong === 0) msg = "🌟 Excellent! Perfect Job!";
         else if (finalWrong <= 3) msg = "😊 Good Job! Keep Going!";
         else if (finalWrong <= 6) msg = "👍 Nice Try! You’re Learning!";
         else msg = "💪 Try Again! You’ll Do Better!";
 
-        setFinalMessage(msg);
-        setShowPopup(true);
+        setIsSaving(true);
+        const saved = await saveScore(finalWrong);
+        setIsSaving(false);
 
-        saveScore(finalWrong);
+        if (saved) {
+          setFinalMessage(msg);
+          setShowPopup(true);
+        } else {
+          alert("Score was not saved. Please login again and try.");
+        }
       }
     } else {
       const wrongAudio = new Audio(wrongSoundFile);
-      wrongAudio.play();
+      wrongAudio.play().catch((err) => console.log("Audio play error:", err));
 
       setWrongIndex(index);
       setWrongCount((prev) => prev + 1);
 
-      setTimeout(() => setWrongIndex(null), 500);
+      setTimeout(() => {
+        setWrongIndex(null);
+      }, 500);
     }
   };
 
@@ -204,7 +225,22 @@ function QuizLetter() {
     if (currentIndex < letters.length - 1) {
       const nextLetter = letters[currentIndex + 1].toLowerCase();
       navigate(`/quiz/${nextLetter}`);
+    } else {
+      navigate("/result");
     }
+  };
+
+  const handleSpeaker = () => {
+    const audio = new Audio(alphabetSounds[currentLetter]);
+    audio.play().catch((err) => console.log("Audio play error:", err));
+  };
+
+  const handleHome = () => {
+    navigate("/home");
+  };
+
+  const handleClose = () => {
+    navigate("/");
   };
 
   return (
@@ -215,20 +251,21 @@ function QuizLetter() {
             src={speaker}
             alt="speaker"
             className="icon speaker"
+            onClick={handleSpeaker}
           />
 
           <img
             src={home}
             alt="home"
             className="icon home"
-            onClick={() => navigate("/home")}
+            onClick={handleHome}
           />
 
           <img
             src={close}
             alt="close"
             className="icon close"
-            onClick={() => navigate("/")}
+            onClick={handleClose}
           />
         </div>
 
@@ -246,9 +283,9 @@ function QuizLetter() {
             {cards.map((img, index) => (
               <div
                 key={index}
-                className={`card-wrapper
-                  ${correctIndexes.includes(index) ? "correct" : ""}
-                  ${wrongIndex === index ? "wrong shake" : ""}`}
+                className={`card-wrapper ${
+                  correctIndexes.includes(index) ? "correct" : ""
+                } ${wrongIndex === index ? "wrong shake" : ""}`}
               >
                 <img
                   src={alphabetImages[img]}
