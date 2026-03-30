@@ -67,7 +67,6 @@ import wrongSoundFile from "../assets/audio/We-need-to-try-again.mpeg";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-/* ================= MAPS ================= */
 const alphabetImages = {
   A, B, C, D, E, F, G, H, I, J,
   K, L, M, N, O, P, Q, R, S, T,
@@ -137,37 +136,43 @@ function QuizLetter() {
   }, [generateCards]);
 
   const saveScore = async (finalWrong) => {
-  const score = 4 * 10 - finalWrong * 2;
-  const studentId = localStorage.getItem("student_id");
+    const score = 4 * 10 - finalWrong * 2;
+    const studentId = localStorage.getItem("student_id");
 
-  try {
-    const response = await fetch(`${API_URL}/SaveScoreServlet`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      credentials: "include",
-      body: new URLSearchParams({
-        student_id: studentId || "",
-        alphabet: currentLetter,
-        correct_count: "4",
-        wrong_count: String(finalWrong),
-        score: String(score)
-      }).toString()
-    });
+    if (!studentId || studentId === "undefined" || studentId === "null") {
+      alert("Please login again.");
+      navigate("/");
+      return false;
+    }
 
-    const data = await response.json();
-    console.log("Save score response:", data);
+    try {
+      const response = await fetch(`${API_URL}/SaveScoreServlet`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include",
+        body: new URLSearchParams({
+          student_id: studentId,
+          alphabet: currentLetter,
+          correct_count: "4",
+          wrong_count: String(finalWrong),
+          score: String(score)
+        }).toString()
+      });
 
-    return (
-      data.message === "Score inserted successfully" ||
-      data.message === "Score updated successfully"
-    );
-  } catch (error) {
-    console.error("Error saving score:", error);
-    return false;
-  }
-};
+      const data = await response.json();
+      console.log("Save score response:", data);
+
+      return (
+        data.message === "Score inserted successfully" ||
+        data.message === "Score updated successfully"
+      );
+    } catch (error) {
+      console.error("Error saving score:", error);
+      return false;
+    }
+  };
 
   const handleClick = async (value, index) => {
     if (correctIndexes.includes(index) || isSaving) return;

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./../styles/SignupLogin.css";
 import astroImage from "../assets/images/babyastro.png";
 
-// ✅ ADD THIS LINE
 const API_URL = process.env.REACT_APP_API_URL;
 
 function SignupLogin() {
@@ -23,13 +22,11 @@ function SignupLogin() {
     confirmPassword: "",
   });
 
-  // ---------------- INPUT HANDLER ----------------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ===================== SIGNUP =====================
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -48,11 +45,13 @@ function SignupLogin() {
     params.append("password", formData.password);
 
     try {
-     const response = await fetch(`${API_URL}/SignupServlet`, {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  body: params.toString(),
-});
+      const response = await fetch(`${API_URL}/SignupServlet`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+      });
 
       const text = await response.text();
 
@@ -70,38 +69,45 @@ function SignupLogin() {
     }
   };
 
-  // ===================== LOGIN =====================
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const params = new URLSearchParams();
-  params.append("email", formData.email);
-  params.append("password", formData.password);
+    const params = new URLSearchParams();
+    params.append("email", formData.email);
+    params.append("password", formData.password);
 
-  try {
-    const response = await fetch(`${API_URL}/LoginServlet`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      credentials: "include",
-      body: params.toString(),
-    });
+    try {
+      const response = await fetch(`${API_URL}/LoginServlet`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        credentials: "include",
+        body: params.toString(),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
+      console.log("Login response:", data);
 
-    if (data.message && data.message.toLowerCase().includes("successful")) {
-      localStorage.setItem("student_id", data.student_id);
-      localStorage.setItem("student_name", data.first_name || "");
-      navigate("/home");
-    } else {
-      setError(data.message || "Login failed");
+      if (
+        data.message &&
+        data.message.toLowerCase().includes("successful") &&
+        data.student_id !== undefined &&
+        data.student_id !== null
+      ) {
+        localStorage.setItem("student_id", String(data.student_id));
+        localStorage.setItem("student_name", data.first_name || "");
+        setError("");
+        navigate("/home");
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Login failed. Please try again.");
     }
-  } catch (err) {
-    console.error(err);
-    setError("Login failed. Please try again.");
-  }
-};
+  };
 
-  // ---------------- CLOSE MODAL ----------------
   const closeModal = () => {
     setShowModal(false);
     setFormData({
@@ -121,13 +127,19 @@ function SignupLogin() {
         <div className="tabs">
           <label
             className={isSignup ? "active" : ""}
-            onClick={() => setIsSignup(true)}
+            onClick={() => {
+              setIsSignup(true);
+              setError("");
+            }}
           >
             Signup
           </label>
           <label
             className={!isSignup ? "active" : ""}
-            onClick={() => setIsSignup(false)}
+            onClick={() => {
+              setIsSignup(false);
+              setError("");
+            }}
           >
             Login
           </label>
@@ -138,12 +150,54 @@ function SignupLogin() {
             <form onSubmit={handleSignup}>
               <h3>Signup</h3>
 
-              <input name="name" placeholder="First Name" value={formData.name} onChange={handleChange} required />
-              <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-              <input type="number" name="age" min="2" max="6" placeholder="Child Age" value={formData.age} onChange={handleChange} required />
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-              <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-              <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
+              <input
+                name="name"
+                placeholder="First Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <input
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="number"
+                name="age"
+                min="2"
+                max="6"
+                placeholder="Child Age"
+                value={formData.age}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
 
               {error && <p className="error-msg">{error}</p>}
 
@@ -153,8 +207,22 @@ function SignupLogin() {
             <form onSubmit={handleLogin}>
               <h3>Login</h3>
 
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-              <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
 
               {error && <p className="error-msg">{error}</p>}
 
@@ -173,7 +241,9 @@ function SignupLogin() {
           <div className="modal-box">
             <h2>Signup Successful 🎉</h2>
             <p>{successMsg}</p>
-            <button className="ok-btn" onClick={closeModal}>OK</button>
+            <button className="ok-btn" onClick={closeModal}>
+              OK
+            </button>
           </div>
         </div>
       )}

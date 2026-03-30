@@ -14,34 +14,41 @@ function Result() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  const fetchResults = async () => {
-    const studentId = localStorage.getItem("student_id");
+    const fetchResults = async () => {
+      const studentId = localStorage.getItem("student_id");
 
-    try {
-      const response = await fetch(`${API_URL}/ResultServlet`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        credentials: "include",
-        body: new URLSearchParams({
-          student_id: studentId || ""
-        }).toString()
-      });
+      if (!studentId || studentId === "undefined" || studentId === "null") {
+        console.log("Invalid student_id");
+        setScores([]);
+        setLoading(false);
+        return;
+      }
 
-      const data = await response.json();
-      console.log("Result data:", data);
-      setScores(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.log("Error fetching result:", err);
-      setScores([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const response = await fetch(`${API_URL}/ResultServlet`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          credentials: "include",
+          body: new URLSearchParams({
+            student_id: studentId
+          }).toString()
+        });
 
-  fetchResults();
-}, []);
+        const data = await response.json();
+        console.log("Result data:", data);
+        setScores(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.log("Error fetching result:", err);
+        setScores([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, []);
 
   const handleSpeaker = () => {
     const audio = new Audio("/sounds/result.mpeg");
@@ -62,6 +69,8 @@ function Result() {
       console.log("Logout error:", error);
     }
 
+    localStorage.removeItem("student_id");
+    localStorage.removeItem("student_name");
     navigate("/");
   };
 
