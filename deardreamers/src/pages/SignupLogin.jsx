@@ -70,43 +70,51 @@ function SignupLogin() {
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const params = new URLSearchParams();
-    params.append("email", formData.email);
-    params.append("password", formData.password);
+  const params = new URLSearchParams();
+  params.append("email", formData.email);
+  params.append("password", formData.password);
 
+  try {
+    const response = await fetch(`${API_URL}/LoginServlet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      credentials: "include",
+      body: params.toString(),
+    });
+
+    const text = await response.text();
+    console.log("RAW LOGIN RESPONSE:", text);
+
+    let data;
     try {
-      const response = await fetch(`${API_URL}/LoginServlet`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        credentials: "include",
-        body: params.toString(),
-      });
-
-      const data = await response.json();
-      console.log("Login response:", data);
-
-      if (
-        data.message &&
-        data.message.toLowerCase().includes("successful") &&
-        data.student_id !== undefined &&
-        data.student_id !== null
-      ) {
-        localStorage.setItem("student_id", String(data.student_id));
-        localStorage.setItem("student_name", data.first_name || "");
-        setError("");
-        navigate("/home");
-      } else {
-        setError(data.message || "Login failed");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Login failed. Please try again.");
+      data = JSON.parse(text);
+    } catch (jsonError) {
+      console.error("JSON parse failed:", jsonError);
+      setError("Server returned invalid JSON. Check console.");
+      return;
     }
-  };
+
+    console.log("PARSED LOGIN RESPONSE:", data);
+
+    if (
+      data.message &&
+      data.message.toLowerCase().includes("successful") &&
+      data.student_id !== undefined &&
+      data.student_id !== null
+    ) {
+      localStorage.setItem("student_id", String(data.student_id));
+      localStorage.setItem("student_name", data.first_name || "");
+      navigate("/home");
+    } else {
+      setError(data.message || "Login failed");
+    }
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    setError("Login failed. Please try again.");
+  }
+};
 
   const closeModal = () => {
     setShowModal(false);
