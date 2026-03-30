@@ -72,32 +72,34 @@ function SignupLogin() {
 
   // ===================== LOGIN =====================
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const params = new URLSearchParams();
-    params.append("email", formData.email);
-    params.append("password", formData.password);
+  const params = new URLSearchParams();
+  params.append("email", formData.email);
+  params.append("password", formData.password);
 
-    try {
-     const response = await fetch(`${API_URL}/LoginServlet`, {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  credentials: "include",
-  body: params.toString(),
-});
+  try {
+    const response = await fetch(`${API_URL}/LoginServlet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      credentials: "include",
+      body: params.toString(),
+    });
 
-      const text = await response.text();
+    const data = await response.json();
 
-      if (text.toLowerCase().includes("successful")) {
-        navigate("/home");
-      } else {
-        setError(text);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Login failed. Please try again.");
+    if (data.message && data.message.toLowerCase().includes("successful")) {
+      localStorage.setItem("student_id", data.student_id);
+      localStorage.setItem("student_name", data.first_name || "");
+      navigate("/home");
+    } else {
+      setError(data.message || "Login failed");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setError("Login failed. Please try again.");
+  }
+};
 
   // ---------------- CLOSE MODAL ----------------
   const closeModal = () => {

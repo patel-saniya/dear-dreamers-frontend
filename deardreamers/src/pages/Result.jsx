@@ -14,31 +14,34 @@ function Result() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchResults = async () => {
-      try {
-        const response = await fetch(`${API_URL}/ResultServlet`, {
-          method: "POST",
-          credentials: "include"
-        });
+  const fetchResults = async () => {
+    const studentId = localStorage.getItem("student_id");
 
-        const data = await response.json();
-        console.log("Result data:", data);
+    try {
+      const response = await fetch(`${API_URL}/ResultServlet`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        credentials: "include",
+        body: new URLSearchParams({
+          student_id: studentId || ""
+        }).toString()
+      });
 
-        if (Array.isArray(data)) {
-          setScores(data);
-        } else {
-          setScores([]);
-        }
-      } catch (err) {
-        console.log("Error fetching result:", err);
-        setScores([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const data = await response.json();
+      console.log("Result data:", data);
+      setScores(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.log("Error fetching result:", err);
+      setScores([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchResults();
-  }, []);
+  fetchResults();
+}, []);
 
   const handleSpeaker = () => {
     const audio = new Audio("/sounds/result.mpeg");

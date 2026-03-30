@@ -137,39 +137,37 @@ function QuizLetter() {
   }, [generateCards]);
 
   const saveScore = async (finalWrong) => {
-    const score = 4 * 10 - finalWrong * 2;
+  const score = 4 * 10 - finalWrong * 2;
+  const studentId = localStorage.getItem("student_id");
 
-    try {
-      const response = await fetch(`${API_URL}/SaveScoreServlet`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        credentials: "include",
-        body: new URLSearchParams({
-          alphabet: currentLetter,
-          correct_count: "4",
-          wrong_count: String(finalWrong),
-          score: String(score)
-        }).toString()
-      });
+  try {
+    const response = await fetch(`${API_URL}/SaveScoreServlet`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      credentials: "include",
+      body: new URLSearchParams({
+        student_id: studentId || "",
+        alphabet: currentLetter,
+        correct_count: "4",
+        wrong_count: String(finalWrong),
+        score: String(score)
+      }).toString()
+    });
 
-      const data = await response.json();
-      console.log("Save score response:", data);
+    const data = await response.json();
+    console.log("Save score response:", data);
 
-      if (
-        data.message === "Score inserted successfully" ||
-        data.message === "Score updated successfully"
-      ) {
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      console.error("Error saving score:", error);
-      return false;
-    }
-  };
+    return (
+      data.message === "Score inserted successfully" ||
+      data.message === "Score updated successfully"
+    );
+  } catch (error) {
+    console.error("Error saving score:", error);
+    return false;
+  }
+};
 
   const handleClick = async (value, index) => {
     if (correctIndexes.includes(index) || isSaving) return;
