@@ -53,9 +53,9 @@ function SignupLogin() {
         body: params.toString(),
       });
 
-      const text = await response.text();
-
-      if (text.toLowerCase().includes("successful")) {
+      const data = await response.json();
+      
+      if (data.message.toLowerCase().includes("successful")) { {
         setSuccessMsg(
           `Hello ${formData.name}! 🎉 Your account has been created successfully.`
         );
