@@ -55,7 +55,7 @@ function SignupLogin() {
 
       const data = await response.json();
       
-      if (data.message.toLowerCase().includes("successful")) { {
+      if (data.message.toLowerCase().includes("successful"))  {
         setSuccessMsg(
           `Hello ${formData.name}! 🎉 Your account has been created successfully.`
         );
